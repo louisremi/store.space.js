@@ -17,7 +17,7 @@ But if you do so, updating your object will soon become a complicated and ressou
 4. the object is turned back to a string
 5. the item is stored to the localStorage
 
-Here is what hapened with a namespaced store:
+Here is what hapens with a namespaced store:
 
 1. the object is turned to a string
 2. the item is stored to the localStorage
