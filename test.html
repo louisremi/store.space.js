@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+	<script src="https://github.com/marcuswestin/store.js/raw/master/store.js"></script>
+	<script src="store.space.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
+	<script>
+		jQuery(function() {
+    	
+    	module('Store');
+    	
+			test("get", function() {
+			  ok( !store.get('inexistantKey'), "simple get test" );
+			});
+			
+			test("set", function() {
+			  ok( !store.set('randomKey', 'randomValue'), "simple set test" );
+			});
+			
+			test("set/get", function() {
+				var key = 'specificKey',
+					value = 'firstSpecificValue';
+			  store.set(key, value);
+			  equal( store.get(key), value, "can retrieve an item" );
+			  value = 'secondSpecificValue';
+			  store.set(key, value);
+			  equal( store.get(key), value, "can override an item" );
+			});
+
+			test("remove", function() {
+				var key = 'specificKey';
+			  store.set(key, 'value');
+			  store.remove(key)
+			  ok( !store.get(key), "item can be removed" );
+			});
+
+			test("clear", function() {
+				var key = 'specificKey';
+			  store.set(key, 'value');
+			  store.clear()
+			  ok( !store.get(key), "items have been removed" );
+			});
+			
+			module('Store Space');
+			
+			var myStore = store.space('my');
+			
+			test("get", function() {
+			  ok( !myStore('inexistantKey'), "simple get test" );
+			});
+			
+			test("set", function() {
+			  ok( !myStore('randomKey', 'randomValue'), "simple set test" );
+			});
+			
+			test("set/get", function() {
+				var key = 'specificKey',
+					key2 = 'anotherKey',
+					value = 'thirdSpecificValue';
+			  myStore(key, value);
+			  equal( myStore(key), value, "can retrieve an item" );
+			  value = 'fourthSpecificValue';
+			  myStore(key, value);
+			  equal( myStore(key), value, "can override an item" );
+			  value = 'fivthSpecificValue';
+			  myStore(key2, value);
+			  equal( myStore(key2), value, "can store multiple items" );
+			});
+
+			test("remove", function() {
+				var key = 'specificKey',
+					key2 = 'anotherKey',
+					value = 'sixthSpecificValue';
+			  myStore(key, value);
+			  myStore.remove(key)
+			  ok( !myStore(key), "item can be removed" );
+			});
+
+			var store2 = store.space('_2');
+			
+			test("namespace", function() {
+				var key = 'specificKey',
+					value1 = 'value1',
+					value2 = 'value2',
+					value3 = 'value3';
+				myStore(key, value1);
+				store2(key, value2);
+				equal( myStore(key), value1, "items written in different namespaces do not overwrite each other");
+				store.set(key, value3);
+				store2(key, value2);
+				equal( store.get(key), value3, "items in the global namespace are not overwritten");
+			});
+			
+			test("clear", function() {
+				var key = 'specificKey';
+			  myStore(key, 'value');
+			  myStore.clear()
+			  ok( !myStore(key), "items have been removed" );
+			});
+
+		});
+  </script>
+  <title>Store.js &amp; Store.space.js tests</title>
+</head>
+<body>
+	<h1 id="qunit-header">Store.js &amp; Store.space.js tests</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</body>
+</html>
